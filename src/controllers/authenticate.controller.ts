@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UnauthorizedException, UsePipes } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post, UnauthorizedException, UsePipes } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { JwtService } from "@nestjs/jwt";
@@ -16,7 +16,8 @@ type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 export class AuthenticateController {
     constructor(private jwt: JwtService, private prisma: PrismaService) { }
 
-    @Post("/authenticate")
+    @Post()
+    @HttpCode(HttpStatus.OK)
     @UsePipes(new ZodValidationPipe(authenticateBodySchema))
     async handle(@Body() body: AuthenticateBodySchema) {
         const { email, password } = body;

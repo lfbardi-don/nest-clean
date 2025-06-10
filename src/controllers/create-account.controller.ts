@@ -1,4 +1,4 @@
-import { Body, ConflictException, Controller, HttpCode, Post, UsePipes } from "@nestjs/common";
+import { Body, ConflictException, Controller, HttpCode, HttpStatus, Post, UsePipes } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { hash } from "bcryptjs";
 import { z } from "zod";
@@ -17,7 +17,7 @@ export class CreateAccountController {
     constructor(private prisma: PrismaService) { }
 
     @Post()
-    @HttpCode(201)
+    @HttpCode(HttpStatus.CREATED)
     @UsePipes(new ZodValidationPipe(createAccountBodySchema))
     async handle(@Body() body: CreateAccountBodySchema) {
         const { name, email, password } = body;
@@ -38,6 +38,6 @@ export class CreateAccountController {
             data: { name, email, password: hashedPassword }
         });
 
-        return user;
+        return { user };
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "@/pipes/zod-validation-pipe";
 import { PrismaService } from "@/prisma/prisma.service";
@@ -19,6 +19,7 @@ export class CreateQuestionController {
     constructor(private prisma: PrismaService) { }
 
     @Post()
+    @HttpCode(HttpStatus.CREATED)
     async handle(
         @Body(new ZodValidationPipe(createQuestionBodySchema)) body: CreateQuestionBodySchema,
         @CurrentUser() user: JWTPayload
@@ -38,7 +39,7 @@ export class CreateQuestionController {
             }
         });
 
-        return question;
+        return { question };
     }
 
     private generateSlug(title: string): string {
