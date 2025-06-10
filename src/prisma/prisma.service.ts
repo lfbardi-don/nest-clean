@@ -6,14 +6,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     constructor() {
         super({
             log: ["warn", "error"],
-        })
+        });
     }
 
     onModuleInit() {
-        this.$connect()
+        this.$connect();
     }
 
     onModuleDestroy() {
-        this.$disconnect()
+        this.$disconnect();
     }
 }

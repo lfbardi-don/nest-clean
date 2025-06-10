@@ -6,7 +6,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
-import vitestGlobals from "eslint-plugin-vitest-globals";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,33 +15,39 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default defineConfig([{
-    extends: compat.extends(
-        "plugin:vitest-globals/recommended",
-        "plugin:@typescript-eslint/recommended",
-    ),
-
-    plugins: {
-        "@typescript-eslint": typescriptEslint,
+export default defineConfig([
+    // Ignore patterns (replacing .eslintignore)
+    {
+        ignores: ["node_modules/**", "dist/**"]
     },
+    // TypeScript files configuration
+    {
+        files: ["**/*.ts"],
+        extends: compat.extends(
+            "plugin:@typescript-eslint/recommended",
+        ),
 
-    languageOptions: {
-        globals: {
-            ...vitestGlobals.environments.env.globals,
-            ...globals.node,
+        plugins: {
+            "@typescript-eslint": typescriptEslint,
         },
 
-        parser: tsParser,
-        ecmaVersion: 2024,
-        sourceType: "module",
+        languageOptions: {
+            globals: {
+                ...globals.node,
+            },
 
-        parserOptions: {
-            project: "./tsconfig.json",
+            parser: tsParser,
+            ecmaVersion: 2024,
+            sourceType: "module",
+
+            parserOptions: {
+                project: "./tsconfig.json",
+            },
         },
-    },
 
-    rules: {
-        "no-useless-constructor": "off",
-        semi: ["error", "always"],
-    },
-}]);
+        rules: {
+            "no-useless-constructor": "off",
+            "semi": ["error", "always"],
+        },
+    }
+]);
