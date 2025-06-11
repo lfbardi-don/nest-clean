@@ -21,7 +21,7 @@ export class FetchRecentQuestionsUseCase {
     async execute({
         page,
     }: FetchRecentQuestionsUseCaseProps): Promise<FetchRecentQuestionsUseCaseResponse> {
-        const questions = await this.questionsRepository.findManyRecent({ page });
+        const questions = await this.questionsRepository.findManyRecent({ page, limit: 20 });
 
         return right({ questions, totalCount: questions.length });
     }

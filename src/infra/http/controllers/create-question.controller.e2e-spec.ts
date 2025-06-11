@@ -1,4 +1,4 @@
-import { AppModule } from "@/app.module";
+import { AppModule } from "@/infra/app.module";
 import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { HttpStatus, INestApplication } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
@@ -48,6 +48,7 @@ describe('Create Question (E2E)', () => {
             .expect(HttpStatus.CREATED);
 
         const questionId = response.body.question.id;
+        console.log('Question ID:', questionId);
 
         const question = await prisma.question.findUnique({
             where: {

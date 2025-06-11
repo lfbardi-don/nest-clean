@@ -22,7 +22,7 @@ export class FetchAnswerCommentsUseCase {
         answerId,
         page,
     }: FetchAnswerCommentsUseCaseProps): Promise<FetchAnswerCommentsUseCaseResponse> {
-        const answerComments = await this.answersCommentsRepository.findManyByAnswerId(answerId, { page });
+        const answerComments = await this.answersCommentsRepository.findManyByAnswerId(answerId, { page, limit: 20 });
         return right({ answerComments, totalCount: answerComments.length });
     }
 }

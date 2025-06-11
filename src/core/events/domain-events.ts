@@ -1,14 +1,16 @@
-import { AggregateRoot } from '../entities/aggregate-root';
-import { DomainEvent } from './domain-event';
-import { UniqueEntityId } from '../entities/unique-entity-id';
+import { AggregateRoot } from '../entities/aggregate-root'
+import { UniqueEntityId } from '../entities/unique-entity-id'
+import { DomainEvent } from './domain-event'
 
-type DomainEventCallback = (event: DomainEvent) => void;
+type DomainEventCallback = (event: unknown) => void;
 
 export class DomainEvents {
     private static handlersMap: Record<string, DomainEventCallback[]> = {};
-    private static markedAggregates: AggregateRoot<DomainEvent>[] = [];
+    private static markedAggregates: AggregateRoot<unknown>[] = [];
 
-    public static markAggregateForDispatch(aggregate: AggregateRoot<DomainEvent>) {
+    public static shouldRun = true;
+
+    public static markAggregateForDispatch(aggregate: AggregateRoot<unknown>) {
         const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id);
 
         if (!aggregateFound) {
@@ -16,12 +18,12 @@ export class DomainEvents {
         }
     }
 
-    private static dispatchAggregateEvents(aggregate: AggregateRoot<DomainEvent>) {
+    private static dispatchAggregateEvents(aggregate: AggregateRoot<unknown>) {
         aggregate.domainEvents.forEach((event: DomainEvent) => this.dispatch(event));
     }
 
     private static removeAggregateFromMarkedDispatchList(
-        aggregate: AggregateRoot<DomainEvent>,
+        aggregate: AggregateRoot<unknown>,
     ) {
         const index = this.markedAggregates.findIndex((a) => a.equals(aggregate));
 
@@ -30,7 +32,7 @@ export class DomainEvents {
 
     private static findMarkedAggregateByID(
         id: UniqueEntityId,
-    ): AggregateRoot<DomainEvent> | undefined {
+    ): AggregateRoot<unknown> | undefined {
         return this.markedAggregates.find((aggregate) => aggregate.id.equals(id));
     }
 
@@ -69,6 +71,10 @@ export class DomainEvents {
         const eventClassName: string = event.constructor.name;
 
         const isEventRegistered = eventClassName in this.handlersMap;
+
+        if (!this.shouldRun) {
+            return;
+        }
 
         if (isEventRegistered) {
             const handlers = this.handlersMap[eventClassName];

@@ -1,10 +1,10 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { z } from "zod";
-import { ZodValidationPipe } from "@/infra/pipes/zod-validation-pipe";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
-import { JwtAuthGuard } from "@/auth/jwt-auth.guard";
-import { CurrentUser } from "@/auth/current-user-decorator";
-import { JWTPayload } from "@/auth/jwt.strategy";
+import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
+import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
+import { CurrentUser } from "@/infra/auth/current-user-decorator";
+import { JWTPayload } from "@/infra/auth/jwt.strategy";
+import { CreateQuestionUseCase } from "@/domain/forum/application/use-cases/create-question";
 
 const createQuestionBodySchema = z.object({
     title: z.string(),
@@ -16,7 +16,7 @@ type CreateQuestionBodySchema = z.infer<typeof createQuestionBodySchema>
 @Controller("/questions")
 @UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
-    constructor(private prisma: PrismaService) { }
+    constructor(private createQuestion: CreateQuestionUseCase) { }
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
@@ -25,32 +25,15 @@ export class CreateQuestionController {
         @CurrentUser() user: JWTPayload
     ) {
         const { title, content } = body;
+        const userId = user.sub;
 
-        const question = await this.prisma.question.create({
-            data: {
-                title,
-                content,
-                slug: this.generateSlug(title),
-                author: {
-                    connect: {
-                        id: user.sub,
-                    }
-                }
-            }
+        const question = await this.createQuestion.execute({
+            title,
+            content,
+            authorId: userId,
+            attachmentsIds: [],
         });
 
         return { question };
-    }
-
-    private generateSlug(title: string): string {
-        return title
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (accents)
-            .replace(/[^\w\s-]/g, '') // Remove special characters
-            .replace(/\s+/g, '-') // Replace spaces with hyphens
-            .replace(/-+/g, '-') // Replace multiple hyphens with a single hyphen
-            .trim() // Remove leading and trailing spaces
-            .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
     }
 }
