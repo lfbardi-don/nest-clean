@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Query, UseGuards } from "@nestjs/common";
+import { BadRequestException, Controller, Get, HttpCode, HttpStatus, Query, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { z } from "zod";
@@ -24,15 +24,15 @@ export class FetchRecentQuestionsController {
     @Get()
     @HttpCode(HttpStatus.OK)
     async handle(@Query('page', queryValidationPipe) page: PageQueryParamSchema) {
-        const response = await this.fetchRecentQuestions.execute({
+        const result = await this.fetchRecentQuestions.execute({
             page,
         });
 
-        if (response.isLeft()) {
-            throw new Error('Failed to fetch recent questions');
+        if (result.isLeft()) {
+            throw new BadRequestException();
         }
 
-        const { questions, totalCount } = response.value;
+        const { questions, totalCount } = result.value;
 
         return { questions: questions.map(QuestionPresenter.toHTTP), totalCount };
     }

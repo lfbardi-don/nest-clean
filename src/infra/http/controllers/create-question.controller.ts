@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, BadRequestException, Post, UseGuards } from "@nestjs/common";
+import { BadRequestException, Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
