@@ -1,7 +1,6 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
-import { ConfigService } from "@nestjs/config";
-import { Env } from "@/infra/env";
+import { EnvService } from "../env/env.service";
 import { z } from "zod";
 import { Injectable } from "@nestjs/common";
 
@@ -13,8 +12,8 @@ export type JWTPayload = z.infer<typeof tokenPayloadSchema>;
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(config: ConfigService<Env, true>) {
-        const publicKey = config.get("JWT_PUBLIC_KEY", { infer: true });
+    constructor(config: EnvService) {
+        const publicKey = config.get<string>("JWT_PUBLIC_KEY");
 
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
