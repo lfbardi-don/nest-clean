@@ -1,19 +1,19 @@
-import { FetchQuestionAnswerUseCase } from './fetch-question-answers';
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository';
 import { makeAnswer } from 'test/factories/make-answer';
 import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory-answer-attachments-repository';
+import { FetchQuestionAnswersUseCase } from './fetch-question-answers';
 
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
-let sut: FetchQuestionAnswerUseCase;
+let sut: FetchQuestionAnswersUseCase;
 
 describe('Fetch questions answers', () => {
 
     beforeEach(() => {
         inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository();
         inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentsRepository);
-        sut = new FetchQuestionAnswerUseCase(inMemoryAnswersRepository);
+        sut = new FetchQuestionAnswersUseCase(inMemoryAnswersRepository);
     });
 
     it('should get questions answers', async () => {
