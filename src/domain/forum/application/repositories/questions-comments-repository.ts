@@ -1,9 +1,9 @@
 import { PaginationParams } from '@/core/repositories/pagination-params';
 import { QuestionComment } from '@/domain/forum/enterprise/entities/question-comment';
 
-export interface QuestionsCommentsRepository {
-    create(questionComment: QuestionComment): Promise<QuestionComment>
-    delete(questionComment: QuestionComment): Promise<void>
-    findById(id: string): Promise<QuestionComment | null>
-    findManyByQuestionId(questionId: string, page: PaginationParams): Promise<QuestionComment[]>
+export abstract class QuestionsCommentsRepository {
+    abstract create(questionComment: QuestionComment): Promise<QuestionComment>
+    abstract delete(questionComment: QuestionComment): Promise<void>
+    abstract findById(id: string): Promise<QuestionComment | null>
+    abstract findManyByQuestionId(questionId: string, page: PaginationParams): Promise<QuestionComment[]>
 }
