@@ -19,7 +19,7 @@ const bodyValidationPipe = new ZodValidationPipe(answerQuestionBodySchema)
 
 type AnswerQuestionBodySchema = z.infer<typeof answerQuestionBodySchema>
 
-@Controller('/questions/:questionId/answers')
+@Controller('/questions/:id/answers')
 export class AnswerQuestionController {
     constructor(private answerQuestion: AnswerQuestionUseCase) { }
 
@@ -27,7 +27,7 @@ export class AnswerQuestionController {
     async handle(
         @Body(bodyValidationPipe) body: AnswerQuestionBodySchema,
         @CurrentUser() user: JWTPayload,
-        @Param('questionId') questionId: string,
+        @Param('id') questionId: string,
     ) {
         const { content } = body
         const userId = user.sub
