@@ -11,9 +11,9 @@ export class PrismaAttachmentsRepository implements AttachmentsRepository {
     async create(attachment: Attachment): Promise<Attachment> {
         const raw = PrismaAttachmentMapper.toPrisma(attachment);
 
-        // const createdAttachment = await this.prisma.attachment.create({
-        //     data: raw,
-        // });
+        await this.prisma.attachment.create({
+            data: raw,
+        });
 
         return attachment;
     }
