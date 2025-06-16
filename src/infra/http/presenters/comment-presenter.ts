@@ -7,6 +7,6 @@ export class CommentPresenter {
             content: comment.content,
             createdAt: comment.createdAt,
             updatedAt: comment.updatedAt,
-        }
+        };
     }
 }

@@ -9,6 +9,6 @@ export class QuestionPresenter {
             bestAnswerId: question.bestAnswerId?.toString(),
             createdAt: question.createdAt,
             updatedAt: question.updatedAt,
-        }
+        };
     }
 }

@@ -7,6 +7,6 @@ export class AnswerPresenter {
             content: answer.content,
             createdAt: answer.createdAt,
             updatedAt: answer.updatedAt,
-        }
+        };
     }
 }

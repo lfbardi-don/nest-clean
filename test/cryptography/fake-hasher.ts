@@ -3,10 +3,10 @@ import { HashGenerator } from "@/domain/forum/application/cryptography/hash-gene
 
 export class FakeHasher implements HashGenerator, HashComparator {
     async hash(text: string): Promise<string> {
-        return text.concat('-hashed')
+        return text.concat('-hashed');
     }
 
     async compare(text: string, hash: string): Promise<boolean> {
-        return text.concat('-hashed') === hash
+        return text.concat('-hashed') === hash;
     }
 }

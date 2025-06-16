@@ -1,39 +1,39 @@
-import { AppModule } from '@/infra/app.module'
-import { DatabaseModule } from '@/infra/database/database.module'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
-import { INestApplication } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { Test } from '@nestjs/testing'
-import request from 'supertest'
-import { QuestionFactory } from 'test/factories/make-question'
-import { StudentFactory } from 'test/factories/make-student'
-import { AnswerFactory } from 'test/factories/make-answer'
-import { HttpStatus } from '@nestjs/common'
+import { AppModule } from '@/infra/app.module';
+import { DatabaseModule } from '@/infra/database/database.module';
+import { PrismaService } from '@/infra/database/prisma/prisma.service';
+import { INestApplication } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Test } from '@nestjs/testing';
+import request from 'supertest';
+import { QuestionFactory } from 'test/factories/make-question';
+import { StudentFactory } from 'test/factories/make-student';
+import { AnswerFactory } from 'test/factories/make-answer';
+import { HttpStatus } from '@nestjs/common';
 
 describe('Edit answer (E2E)', () => {
-    let app: INestApplication
-    let prisma: PrismaService
-    let answerFactory: AnswerFactory
-    let studentFactory: StudentFactory
-    let questionFactory: QuestionFactory
-    let jwt: JwtService
+    let app: INestApplication;
+    let prisma: PrismaService;
+    let answerFactory: AnswerFactory;
+    let studentFactory: StudentFactory;
+    let questionFactory: QuestionFactory;
+    let jwt: JwtService;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [AppModule, DatabaseModule],
             providers: [StudentFactory, QuestionFactory, AnswerFactory],
-        }).compile()
+        }).compile();
 
-        app = moduleRef.createNestApplication()
+        app = moduleRef.createNestApplication();
 
-        prisma = moduleRef.get(PrismaService)
-        studentFactory = moduleRef.get(StudentFactory)
-        questionFactory = moduleRef.get(QuestionFactory)
-        answerFactory = moduleRef.get(AnswerFactory)
-        jwt = moduleRef.get(JwtService)
+        prisma = moduleRef.get(PrismaService);
+        studentFactory = moduleRef.get(StudentFactory);
+        questionFactory = moduleRef.get(QuestionFactory);
+        answerFactory = moduleRef.get(AnswerFactory);
+        jwt = moduleRef.get(JwtService);
 
-        await app.init()
-    })
+        await app.init();
+    });
 
     test('[PUT] /answers/:id', async () => {
         const user = await studentFactory.makePrismaStudent();
@@ -66,5 +66,5 @@ describe('Edit answer (E2E)', () => {
         });
 
         expect(answerOnDatabase).toBeDefined();
-    })
-})
+    });
+});

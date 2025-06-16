@@ -4,18 +4,18 @@ import {
     Controller,
     Param,
     Post,
-} from '@nestjs/common'
-import { CurrentUser } from '@/infra/auth/current-user-decorator'
-import { JWTPayload } from '@/infra/auth/jwt.strategy'
-import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { z } from 'zod'
-import { CommentOnAnswerUseCase } from '@/domain/forum/application/use-cases/comment-on-answer'
+} from '@nestjs/common';
+import { CurrentUser } from '@/infra/auth/current-user-decorator';
+import { JWTPayload } from '@/infra/auth/jwt.strategy';
+import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe';
+import { z } from 'zod';
+import { CommentOnAnswerUseCase } from '@/domain/forum/application/use-cases/comment-on-answer';
 
 const commentOnAnswerBodySchema = z.object({
     content: z.string(),
-})
+});
 
-const bodyValidationPipe = new ZodValidationPipe(commentOnAnswerBodySchema)
+const bodyValidationPipe = new ZodValidationPipe(commentOnAnswerBodySchema);
 
 type CommentOnAnswerBodySchema = z.infer<typeof commentOnAnswerBodySchema>
 
@@ -29,17 +29,17 @@ export class CommentOnAnswerController {
         @CurrentUser() user: JWTPayload,
         @Param('id') answerId: string,
     ) {
-        const { content } = body
-        const userId = user.sub
+        const { content } = body;
+        const userId = user.sub;
 
         const result = await this.commentOnAnswer.execute({
             content,
             answerId,
             authorId: userId,
-        })
+        });
 
         if (result.isLeft()) {
-            throw new BadRequestException()
+            throw new BadRequestException();
         }
     }
 }
