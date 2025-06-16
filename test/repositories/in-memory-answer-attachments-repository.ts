@@ -18,4 +18,15 @@ export class InMemoryAnswerAttachmentsRepository implements AnswersAttachmentsRe
                 answerAttachment.answerId.toString() !== answerId
         );
     }
+
+    async createMany(attachments: AnswerAttachment[]): Promise<void> {
+        this.answerAttachments.push(...attachments);
+    }
+
+    async deleteMany(attachments: AnswerAttachment[]): Promise<void> {
+        this.answerAttachments = this.answerAttachments.filter(
+            (answerAttachment) =>
+                !attachments.some((attachment) => attachment.equals(answerAttachment))
+        );
+    }
 }

@@ -92,4 +92,39 @@ describe('Edit answer', () => {
         expect(result.isLeft()).toBeTruthy();
         expect(result.value).toBeInstanceOf(UnauthorizedError);
     });
+
+    it('should sync new and removed attachments when editing answer', async () => {
+        const newAnswer = makeAnswer({
+            authorId: new UniqueEntityId('author-1'),
+        }, new UniqueEntityId('answer-1'));
+
+        await inMemoryAnswersRepository.create(newAnswer);
+
+        inMemoryAnswerAttachmentsRepository.answerAttachments.push(
+            makeAnswerAttachment({
+                answerId: newAnswer.id,
+                attachmentId: new UniqueEntityId('attachment-1'),
+            }),
+            makeAnswerAttachment({
+                answerId: newAnswer.id,
+                attachmentId: new UniqueEntityId('attachment-2'),
+            })
+        );
+
+        const result = await sut.execute({
+            authorId: 'author-1',
+            answerId: newAnswer.id.toString(),
+            content: 'New Content',
+            attachmentsIds: ['attachment-1', 'attachment-3'],
+        });
+
+        expect(result.isRight()).toBeTruthy();
+        expect(inMemoryAnswerAttachmentsRepository.answerAttachments).toHaveLength(2);
+        expect(inMemoryAnswerAttachmentsRepository.answerAttachments).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ attachmentId: new UniqueEntityId('attachment-1') }),
+                expect.objectContaining({ attachmentId: new UniqueEntityId('attachment-3') }),
+            ])
+        );
+    });
 });
