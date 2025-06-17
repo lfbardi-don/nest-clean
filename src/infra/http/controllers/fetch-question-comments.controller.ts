@@ -2,7 +2,7 @@ import { BadRequestException, Controller, Get, HttpCode, HttpStatus, Query, Para
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { z } from "zod";
 import { FetchQuestionCommentsUseCase } from "@/domain/forum/application/use-cases/fetch-question-comments";
-import { CommentPresenter } from "../presenters/comment-presenter";
+import { CommentWithAuthorPresenter } from "../presenters/comment-with-author-presenter";
 
 const pageQueryParamSchema = z
     .string()
@@ -34,8 +34,8 @@ export class FetchQuestionCommentsController {
             throw new BadRequestException();
         }
 
-        const { questionComments, totalCount } = result.value;
+        const { comments, totalCount } = result.value;
 
-        return { questionComments: questionComments.map(CommentPresenter.toHTTP), totalCount };
+        return { comments: comments.map(CommentWithAuthorPresenter.toHTTP), totalCount };
     }
 }
