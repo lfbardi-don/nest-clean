@@ -2,7 +2,7 @@ import { BadRequestException, Controller, Get, HttpCode, HttpStatus, Param } fro
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation-pipe";
 import { z } from "zod";
 import { GetQuestionBySlugUseCase } from "@/domain/forum/application/use-cases/get-question-by-slug";
-import { QuestionPresenter } from "../presenters/question-presenter";
+import { QuestionDetailsPresenter } from "../presenters/question-details-presenter";
 
 const queryValidationPipe = new ZodValidationPipe(z.string());
 
@@ -23,6 +23,6 @@ export class GetQuestionBySlugController {
 
         const { question } = result.value;
 
-        return { question: QuestionPresenter.toHTTP(question) };
+        return { question: QuestionDetailsPresenter.toHTTP(question) };
     }
 }

@@ -6,17 +6,25 @@ import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-n
 import { UnauthorizedError } from '../../../../core/errors/errors/unauthorized-error';
 import { InMemoryQuestionsAttachmentsRepository } from 'test/repositories/in-memory-questions-attachments-repository';
 import { makeQuestionAttachment } from 'test/factories/make-question-attachment';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository';
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let inMemoryQuestionsAttachmentsRepository: InMemoryQuestionsAttachmentsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 let sut: DeleteQuestionUseCase;
 
 describe('Delete question', () => {
 
     beforeEach(() => {
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
+        inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
         inMemoryQuestionsAttachmentsRepository = new InMemoryQuestionsAttachmentsRepository();
         inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
-            inMemoryQuestionsAttachmentsRepository
+            inMemoryQuestionsAttachmentsRepository,
+            inMemoryAttachmentsRepository,
+            inMemoryStudentsRepository
         );
         sut = new DeleteQuestionUseCase(inMemoryQuestionsRepository);
     });

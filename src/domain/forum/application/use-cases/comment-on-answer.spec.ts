@@ -4,18 +4,23 @@ import { makeAnswer } from 'test/factories/make-answer';
 import { InMemoryAnswersCommentsRepository } from 'test/repositories/in-memory-answers-comments-repository';
 import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error';
 import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory-answer-attachments-repository';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
 
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswerCommentsRepository: InMemoryAnswersCommentsRepository;
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
+
 let sut: CommentOnAnswerUseCase;
 
 describe('Comment on answer', () => {
 
     beforeEach(() => {
         inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository();
-        inMemoryAnswerCommentsRepository = new InMemoryAnswersCommentsRepository();
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
         inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentsRepository);
+        inMemoryAnswerCommentsRepository = new InMemoryAnswersCommentsRepository(inMemoryStudentsRepository);
+
         sut = new CommentOnAnswerUseCase(inMemoryAnswerCommentsRepository, inMemoryAnswersRepository);
     });
 

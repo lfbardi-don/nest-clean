@@ -6,16 +6,24 @@ import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-n
 import { UnauthorizedError } from '../../../../core/errors/errors/unauthorized-error';
 import { InMemoryQuestionsAttachmentsRepository } from 'test/repositories/in-memory-questions-attachments-repository';
 import { makeQuestionAttachment } from 'test/factories/make-question-attachment';
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let inMemoryQuestionsAttachmentsRepository: InMemoryQuestionsAttachmentsRepository;
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let sut: EditQuestionUseCase;
 
 describe('Edit question', () => {
     beforeEach(() => {
+        inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
         inMemoryQuestionsAttachmentsRepository = new InMemoryQuestionsAttachmentsRepository();
         inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
-            inMemoryQuestionsAttachmentsRepository
+            inMemoryQuestionsAttachmentsRepository,
+            inMemoryAttachmentsRepository,
+            inMemoryStudentsRepository
         );
         sut = new EditQuestionUseCase(inMemoryQuestionsRepository, inMemoryQuestionsAttachmentsRepository);
     });

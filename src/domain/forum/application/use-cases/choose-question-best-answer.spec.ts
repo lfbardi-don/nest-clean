@@ -7,19 +7,27 @@ import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-n
 import { UnauthorizedError } from '../../../../core/errors/errors/unauthorized-error';
 import { InMemoryQuestionsAttachmentsRepository } from 'test/repositories/in-memory-questions-attachments-repository';
 import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory-answer-attachments-repository';
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
 
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let inMemoryQuestionsAttachmentsRepository: InMemoryQuestionsAttachmentsRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 let sut: ChooseQuestionBestAnswerUseCase;
 
 describe('Choose question best answer', () => {
 
     beforeEach(() => {
+        inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
         inMemoryQuestionsAttachmentsRepository = new InMemoryQuestionsAttachmentsRepository();
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
         inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
-            inMemoryQuestionsAttachmentsRepository
+            inMemoryQuestionsAttachmentsRepository,
+            inMemoryAttachmentsRepository,
+            inMemoryStudentsRepository
         );
 
         inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository();

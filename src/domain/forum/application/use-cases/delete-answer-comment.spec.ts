@@ -3,13 +3,16 @@ import { DeleteAnswerCommentUseCase } from './delete-answer-comment';
 import { makeAnswerComment } from 'test/factories/make-answer-comment';
 import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error';
 import { UnauthorizedError } from '../../../../core/errors/errors/unauthorized-error';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
 
 let inMemoryAnswersCommentsRepository: InMemoryAnswersCommentsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let sut: DeleteAnswerCommentUseCase;
 
 describe('Delete answer comment', () => {
     beforeEach(() => {
-        inMemoryAnswersCommentsRepository = new InMemoryAnswersCommentsRepository();
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
+        inMemoryAnswersCommentsRepository = new InMemoryAnswersCommentsRepository(inMemoryStudentsRepository);
         sut = new DeleteAnswerCommentUseCase(inMemoryAnswersCommentsRepository);
     });
 

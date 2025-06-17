@@ -4,19 +4,30 @@ import { InMemoryQuestionsCommentsRepository } from 'test/repositories/in-memory
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository';
 import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error';
 import { InMemoryQuestionsAttachmentsRepository } from 'test/repositories/in-memory-questions-attachments-repository';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository';
 
 let inMemoryQuestionsAttachmentsRepository: InMemoryQuestionsAttachmentsRepository;
 let inMemoryQuestionsCommentsRepository: InMemoryQuestionsCommentsRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 let sut: CommentOnQuestionUseCase;
 
 describe('Comment on question', () => {
     beforeEach(() => {
         inMemoryQuestionsAttachmentsRepository = new InMemoryQuestionsAttachmentsRepository();
-        inMemoryQuestionsCommentsRepository = new InMemoryQuestionsCommentsRepository();
+        inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
         inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
-            inMemoryQuestionsAttachmentsRepository
+            inMemoryQuestionsAttachmentsRepository,
+            inMemoryAttachmentsRepository,
+            inMemoryStudentsRepository
         );
+        inMemoryQuestionsCommentsRepository = new InMemoryQuestionsCommentsRepository(
+            inMemoryStudentsRepository
+        );
+
         sut = new CommentOnQuestionUseCase(inMemoryQuestionsCommentsRepository, inMemoryQuestionsRepository);
     });
 

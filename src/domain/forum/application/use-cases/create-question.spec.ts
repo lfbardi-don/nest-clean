@@ -2,17 +2,25 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id';
 import { CreateQuestionUseCase } from './create-question';
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository';
 import { InMemoryQuestionsAttachmentsRepository } from 'test/repositories/in-memory-questions-attachments-repository';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository';
 
 let inMemoryQuestionsAttachmentsRepository: InMemoryQuestionsAttachmentsRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 let sut: CreateQuestionUseCase;
 
 describe('Create question', () => {
 
     beforeEach(() => {
         inMemoryQuestionsAttachmentsRepository = new InMemoryQuestionsAttachmentsRepository();
+        inMemoryStudentsRepository = new InMemoryStudentsRepository();
+        inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
         inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
-            inMemoryQuestionsAttachmentsRepository
+            inMemoryQuestionsAttachmentsRepository,
+            inMemoryAttachmentsRepository,
+            inMemoryStudentsRepository,
         );
         sut = new CreateQuestionUseCase(inMemoryQuestionsRepository);
     });
