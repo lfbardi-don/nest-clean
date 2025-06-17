@@ -7,6 +7,7 @@ import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
 import { QuestionsAttachmentsRepository } from "@/domain/forum/application/repositories/questions-attachments-repository";
 import { PrismaQuestionDetailsMapper } from "../mappers/prisma-question-details-mapper";
 import { QuestionDetails } from "@/domain/forum/enterprise/entities/value-objects/question-details";
+import { DomainEvents } from "@/core/events/domain-events";
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
@@ -23,6 +24,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         });
 
         await this.questionsAttachmentsRepository.createMany(question.attachments.getItems());
+
+        DomainEvents.dispatchEventsForAggregate(question.id);
 
         return question;
     }
@@ -106,5 +109,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
             this.questionsAttachmentsRepository.createMany(question.attachments.getNewItems()),
             this.questionsAttachmentsRepository.deleteMany(question.attachments.getRemovedItems()),
         ]);
+
+        DomainEvents.dispatchEventsForAggregate(question.id);
     }
 }

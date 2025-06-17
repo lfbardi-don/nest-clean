@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
+import { DomainEvents } from '@/core/events/domain-events';
 
 config({ path: '.env', override: true });
 config({ path: '.env.test', override: true });
@@ -21,6 +22,8 @@ const schemaId = randomUUID();
 
 beforeAll(async () => {
     process.env.DATABASE_URL = generateUniqueDBUrl(schemaId);
+
+    DomainEvents.shouldRun = false;
 
     execSync('npx prisma migrate deploy');
 });
