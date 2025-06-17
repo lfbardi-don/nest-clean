@@ -2,7 +2,6 @@ import { QuestionComment } from '@/domain/forum/enterprise/entities/question-com
 import { QuestionsCommentsRepository } from '@/domain/forum/application/repositories/questions-comments-repository';
 import { PaginationParams } from '@/core/repositories/pagination-params';
 import { CommentWithAuthor } from '@/domain/forum/enterprise/entities/value-objects/comment-with-author';
-import { StudentsRepository } from '@/domain/forum/application/repositories/students-repository';
 import { InMemoryStudentsRepository } from './in-memory-students-repository';
 
 export class InMemoryQuestionsCommentsRepository implements QuestionsCommentsRepository {
